@@ -3,7 +3,6 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
-#include <QMediaPlayer>
 #include <QObject>
 
 class Game;
@@ -17,7 +16,6 @@ public:
 
 private:
     Game *game;
-    QMediaPlayer *missileSound;
 };
 
 #endif // PLAYER_H

@@ -3,7 +3,6 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
-#include <QMediaPlayer>
 #include <QObject>
 
 class Game;
@@ -19,7 +18,6 @@ public slots:
 
 private:
     Game *game;
-    QMediaPlayer *explosionSound;
 };
 
 #endif // MISSILE_H

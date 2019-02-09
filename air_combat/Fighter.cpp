@@ -9,10 +9,6 @@ Fighter::Fighter(Game *game, QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent)
 {
     this->game =  game;
-    // set bullet sound
-    missileSound = new QMediaPlayer();
-    missileSound->setMedia(QUrl("qrc:/sounds/missile.mp3"));
-
     // set graphic
     setPixmap(QPixmap(":/images/fighter.png"));
 }
@@ -33,16 +29,12 @@ void Fighter::keyPressEvent(QKeyEvent *event)
         if (pos().y() >= 20)
             setPos(x(), y() - 20);
     } else if (event->key() == Qt::Key_Space) { // shoot with the space
-        // create a bullet
-        Missile *bullet = new Missile(game);
-        bullet->setPos(x() + 45, y());
-        scene()->addItem(bullet);
+        // create a missile
+        Missile *missile = new Missile(game);
+        missile->setPos(x() + 45, y());
+        scene()->addItem(missile);
 
         // play missileSound
-        if (missileSound->state() == QMediaPlayer::PlayingState) {
-            missileSound->setPosition(0);
-        } else if (missileSound->state() == QMediaPlayer::StoppedState) {
-            missileSound->play();
-        }
+        game->playMissile();
     }
 }

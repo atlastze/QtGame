@@ -19,9 +19,6 @@ Missile::Missile(Game *game, QGraphicsItem *parent)
 
     // start the timer
     timer->start(50);
-
-    explosionSound = new QMediaPlayer();
-    explosionSound->setMedia(QUrl("qrc:/sounds/explosion.mp3"));
 }
 
 void Missile::move()
@@ -44,11 +41,7 @@ void Missile::move()
             delete this;
 
             // play sound
-            if (explosionSound->state() == QMediaPlayer::PlayingState) {
-                explosionSound->setPosition(0);
-            } else if (explosionSound->state() == QMediaPlayer::StoppedState) {
-                explosionSound->play();
-            }
+            game->playExplosion();
 
             // return (all code below refers to a non existint bullet)
             return;

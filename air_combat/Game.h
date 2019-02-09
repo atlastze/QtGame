@@ -7,6 +7,7 @@
 
 
 class Fighter;
+class QMediaPlayer;
 
 class Game : public QGraphicsView {
     Q_OBJECT
@@ -18,6 +19,8 @@ public slots:
     void targetDestroyed();
     void targetEscaped();
     void spawn();
+    void playMissile();
+    void playExplosion();
 
 private:
     QGraphicsScene *scene;
@@ -26,6 +29,9 @@ private:
     QGraphicsTextItem *scoreTextItem;
     int escape;
     QGraphicsTextItem *escapeTextItem;
+    QMediaPlayer *missileSound;
+    QMediaPlayer *explosionSound;
+    QMediaPlayer *bgmPlayer;
 };
 
 #endif // GAME_H

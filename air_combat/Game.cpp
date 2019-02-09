@@ -62,9 +62,17 @@ Game::Game(QWidget *parent) : QGraphicsView(parent)
     playlist->addMedia(QUrl("qrc:/sounds/background.mp3"));
     playlist->setPlaybackMode(QMediaPlaylist::Loop);
 
-    QMediaPlayer *music = new QMediaPlayer();
-    music->setPlaylist(playlist);
-    music->play();
+    bgmPlayer = new QMediaPlayer();
+    bgmPlayer->setPlaylist(playlist);
+    bgmPlayer->play();
+
+    // set missile sound
+    missileSound = new QMediaPlayer();
+    missileSound->setMedia(QUrl("qrc:/sounds/missile.mp3"));
+
+    // set explosion sound
+    explosionSound = new QMediaPlayer();
+    explosionSound->setMedia(QUrl("qrc:/sounds/explosion.mp3"));
 }
 
 void Game::targetDestroyed()
@@ -84,4 +92,22 @@ void Game::spawn()
     // create an enemy
     Enemy *enemy = new Enemy(this);
     scene->addItem(enemy);
+}
+
+void Game::playMissile()
+{
+    if (missileSound->state() == QMediaPlayer::PlayingState) {
+        missileSound->setPosition(0);
+    } else if (missileSound->state() == QMediaPlayer::StoppedState) {
+        missileSound->play();
+    }
+}
+
+void Game::playExplosion()
+{
+    if (explosionSound->state() == QMediaPlayer::PlayingState) {
+        explosionSound->setPosition(0);
+    } else if (explosionSound->state() == QMediaPlayer::StoppedState) {
+        explosionSound->play();
+    }
 }
