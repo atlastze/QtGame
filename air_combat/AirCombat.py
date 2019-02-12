@@ -83,18 +83,19 @@ class Fighter(QGraphicsPixmapItem):
         self.game = game
 
     def keyPressEvent(self, event):
+        step = 37
         if event.key() == Qt.Key_Left:
-            if self.x() >= 10:
-                self.setPos(self.x() - 10, self.y())
+            if self.x() >= step:
+                self.setPos(self.x() - step, self.y())
         elif event.key() == Qt.Key_Right:
-            if self.x() + 10 + self.boundingRect().width() <= self.game.width():
-                self.setPos(self.x() + 10, self.y())
+            if self.x() + step + self.boundingRect().width() <= self.game.width():
+                self.setPos(self.x() + step, self.y())
         elif event.key() == Qt.Key_Down:
-            if self.y() + 10 + self.boundingRect().height() <= self.game.height():
-                self.setPos(self.x(), self.y() + 10)
+            if self.y() + step + self.boundingRect().height() <= self.game.height():
+                self.setPos(self.x(), self.y() + step)
         elif event.key() == Qt.Key_Up:
-            if self.y() >= 10:
-                self.setPos(self.x(), self.y() - 10)
+            if self.y() >= step:
+                self.setPos(self.x(), self.y() - step)
         elif event.key() == Qt.Key_Space:
             # create a missile
             missile = Missile(self.game)
@@ -123,6 +124,8 @@ class Game(QGraphicsView):
                                                 'images/background.png')
         self.setScene(self.scene)
         self.setFixedSize(800, 600)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setBackgroundBrush(QBrush(QImage(bgPath)))
         self.fighter.setPos((self.scene.width() - self.fighter.boundingRect().width()) / 2,
                             (self.scene.height() - self.fighter.boundingRect().height()))
@@ -134,7 +137,7 @@ class Game(QGraphicsView):
         self.scoreTextItem.setDefaultTextColor(Qt.green)
         self.scoreTextItem.setFont(QFont("Arial", 16))
         self.scene.addItem(self.scoreTextItem)
-        self.escape = 3
+        self.escape = 0
         self.escapeTextItem = QGraphicsTextItem()
         # draw the text
         self.escapeTextItem.setPlainText("Escape: " + str(self.escape))  # Escape: 0
@@ -146,16 +149,12 @@ class Game(QGraphicsView):
         # spawn enemies
         self.timer = QTimer()
         self.timer.timeout.connect(self.spawn)
-        self.timer.start(5000)
+        self.timer.start(3000)
 
         self.missileSound = QMediaPlayer()
         missileSoundPath = QDir.current().absoluteFilePath(RESOURCES_DIR +
                                                            'sounds/missile.mp3')
         self.missileSound.setMedia(QMediaContent(QUrl.fromLocalFile(missileSoundPath)))
-        self.explosionSound = QMediaPlayer()
-        explosionSoundPath = QDir.current().absoluteFilePath(RESOURCES_DIR +
-                                                             'sounds/explosion.mp3')
-        self.explosionSound.setMedia(QMediaContent(QUrl.fromLocalFile(explosionSoundPath)))
         self.explosionSound = QMediaPlayer()
         explosionSoundPath = QDir.current().absoluteFilePath(RESOURCES_DIR +
                                                              'sounds/explosion.mp3')
@@ -180,7 +179,7 @@ class Game(QGraphicsView):
         self.scoreTextItem.setPlainText("Score   : " + str(self.score))
 
     def targetEscaped(self):
-        self.escape -= 1
+        self.escape += 1
         self.escapeTextItem.setPlainText("Escape: " + str(self.escape))
 
     def playExplosion(self):
